@@ -1,0 +1,46 @@
+# =========================
+# Python / Environments
+# =========================
+envs/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# =========================
+# IDE / Editor
+# =========================
+.vscode/
+.idea/
+*.code-workspace
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Downloaded models
+# =========================
+**/models/
+
+# =========================
+# Generated output
+# =========================
+**/output/
+
+# Optional: ignore personal input files
+# **/input/input.txt
+
+# =========================
+# Logs / Temp
+# =========================
+*.log
+tmp/
+temp/
+
+# =========================
+# Backup files
+# =========================
+*.ps1~
