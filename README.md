@@ -26,6 +26,18 @@ workflow-automation-lab/
 │
 ├── envs/                     # isolated Python environments per tool
 │
+├── stt/
+│   └── whisperx/             # WhisperX STT module
+│       │
+│       ├── input/            # audio input files
+│       ├── output/           # transcriptions
+│       ├── models/           # model cache
+│       │
+│       ├── setup.ps1         # one-click setup
+│       ├── run.ps1           # single-speaker transcription
+│       ├── run_diarize.ps1   # multi-speaker transcription
+│       └── cleanup.ps1
+│
 ├── tts/
 │   └── kokoro/               # Kokoro TTS module
 │       │
@@ -76,7 +88,7 @@ tts/kokoro/input/input.txt
 Output:
 
 ```
-tts/kokoro/output/audio.wav
+tts\kokoro\output\audio.wav
 ```
 
 Run TTS is equivalent to the command on the CLI
@@ -84,6 +96,69 @@ Run TTS is equivalent to the command on the CLI
 ```powershell
 kokoro-tts tts\kokoro\input\input.txt tts\kokoro\output\output.wav --speed 0.8 --voice af_sarah --lang en-us --model tts\kokoro\models\kokoro-v1.0.onnx --voices tts\kokoro\models\voices-v1.0.bin
 ```
+
+## 🎙️ WhisperX STT Module
+
+**Speech-to-Text** with automatic speech recognition and optional **speaker diarization** (multi-speaker).
+
+Uses WhisperX with batched inference (faster-whisper) and forced alignment for precise word-level timestamps.
+
+### Features
+- GPU-accelerated (CUDA), CPU fallback
+- Optional speaker diarization via pyannote
+- Output as JSON + TXT
+- Isolated Python environment (Python 3.10)
+
+### Setup
+
+```powershell
+.\stt\whisperx\setup.ps1
+```
+
+### Prerequisites for Speaker Diarization
+
+1. Create a Hugging Face account
+2. Generate a read token at https://huggingface.co/settings/tokens
+3. Accept the terms of use for:
+   - https://huggingface.co/pyannote/speaker-diarization-community-1
+   - https://huggingface.co/pyannote/segmentation-3.0
+4. Add your token to `stt/whisperx/.env`:
+   ```
+   HF_TOKEN=hf_your_token_here
+   ```
+
+### Run Single Speaker
+
+```powershell
+.\stt\whisperx\run.ps1
+```
+
+### Run Multi Speaker (with Diarization)
+
+```powershell
+.\stt\whisperx\run_diarize.ps1
+```
+
+### Input / Output
+
+```
+Input:   stt/whisperx/input/           # Audio (.wav, .mp3)
+Output:  stt/whisperx/output/          # Transcript (.json + .txt)
+```
+
+### CLI Equivalent (Single Speaker)
+
+```powershell
+whisperx stt\whisperx\input\audio.wav --model large-v3 --output_format json --batch_size 16
+```
+
+### CLI Equivalent (Diarization)
+
+```powershell
+whisperx stt\whisperx\input\audio.wav --model large-v3 --diarize --hf_token $env:HF_TOKEN --output_format json --batch_size 16
+```
+
+---
 
 ## 🧹 Cleanup
 

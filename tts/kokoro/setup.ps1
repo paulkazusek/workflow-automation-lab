@@ -21,7 +21,6 @@ if (!(Test-Path $envPath)) {
 # 3. pip updaten
 python -m pip install --upgrade pip
 
-# 4. Kokoro installieren
 # 4. requirements installieren (SOURCE OF TRUTH)
 if (Test-Path $reqFile) {
     Write-Host "Installiere requirements.txt..." -ForegroundColor Cyan
