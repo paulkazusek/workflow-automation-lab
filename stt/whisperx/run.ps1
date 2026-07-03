@@ -16,7 +16,7 @@ if (!$audioFile) {
 Write-Host "Input: $($audioFile.Name)" -ForegroundColor Gray
 
 # 2. venv aktivieren
-& "$envPath\Scripts\Activate.ps1"
+. "$envPath\Scripts\Activate.ps1"
 
 # 3. GPU / CPU erkennen
 $device = "cuda"       # {cpu, cuda}
@@ -52,6 +52,10 @@ whisperx $audioFile.FullName `
     --output_dir $outputDir `
     --output_format $outputFormat `
     --batch_size $batchSize | Tee-Object -FilePath $consoleLog
+
+if ($LASTEXITCODE -ne 0) {
+    throw "whisperx fehlgeschlagen (Exit-Code: $LASTEXITCODE)"
+}
 
 if (Test-Path "$outputDir\$baseName.json") {
     Write-Host "Fertig: $outputDir\$baseName.*" -ForegroundColor Green

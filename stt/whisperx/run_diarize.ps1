@@ -33,7 +33,7 @@ if (!$audioFile) {
 Write-Host "Input: $($audioFile.Name)" -ForegroundColor Gray
 
 # 3. venv aktivieren
-& "$envPath\Scripts\Activate.ps1"
+. "$envPath\Scripts\Activate.ps1"
 
 # 4. GPU / CPU erkennen
 $device = "cuda" # (default: cpu) {cpu, cuda}
@@ -66,7 +66,7 @@ $consoleLog = Join-Path $outputDir "konsole.txt"
 Write-Host "Transkribiere mit Diarization..." -ForegroundColor Yellow
 whisperx $audioFile.FullName `
     --model $model `
-    --language en `
+    --language $language `
     --device $device `
     --compute_type $computeType `
     --diarize_model $diarizeModel `
@@ -75,6 +75,10 @@ whisperx $audioFile.FullName `
     --output_dir $outputDir `
     --output_format $outputFormat `
     --batch_size $batchSize | Tee-Object -FilePath $consoleLog
+
+if ($LASTEXITCODE -ne 0) {
+    throw "whisperx fehlgeschlagen (Exit-Code: $LASTEXITCODE)"
+}
 
 if (Test-Path $outputJson) {
     Write-Host "Fertig: $outputJson" -ForegroundColor Green

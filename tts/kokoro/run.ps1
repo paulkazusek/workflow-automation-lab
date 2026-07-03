@@ -35,7 +35,7 @@ if (!(Test-Path $voices)) {
 # 2. Environment aktivieren
 # ------------------------
 
-& "$envPath\Scripts\Activate.ps1"
+. "$envPath\Scripts\Activate.ps1"
 
 # ------------------------
 # 3. Optional: pip sanity check
@@ -57,6 +57,10 @@ kokoro-tts `
     --lang en-us `
     --model $model `
     --voices $voices
+
+if ($LASTEXITCODE -ne 0) {
+    throw "kokoro-tts fehlgeschlagen (Exit-Code: $LASTEXITCODE)"
+}
 
 # ------------------------
 # 5. Output bestätigen

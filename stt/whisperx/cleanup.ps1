@@ -31,9 +31,11 @@ if ($confirm -eq "y") {
         Remove-Item $envPath -Recurse -Force -ErrorAction SilentlyContinue
         Write-Host "venv gelöscht" -ForegroundColor Red
     }
+} else {
+    Write-Host "venv bleibt erhalten" -ForegroundColor Gray
 }
 
 # 4. TEMP FILES
-Get-ChildItem -Path $root -Include *.pyc,*.tmp -Recurse -ErrorAction SilentlyContinue | Remove-Item -Force
+Get-ChildItem -Path $modulePath -Include *.pyc,*.tmp -Recurse -ErrorAction SilentlyContinue | Remove-Item -Force
 
 Write-Host "`nCleanup fertig." -ForegroundColor Green

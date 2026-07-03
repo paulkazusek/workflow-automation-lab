@@ -107,7 +107,7 @@ Uses WhisperX with batched inference (faster-whisper) and forced alignment for p
 - GPU-accelerated (CUDA), CPU fallback
 - Optional speaker diarization via pyannote
 - Output as JSON + TXT
-- Isolated Python environment (Python 3.10)
+- Isolated Python environment (Python 3.11)
 
 ### Setup
 
@@ -166,4 +166,5 @@ To reset environment or outputs:
 
 ```powershell
 .\tts\kokoro\cleanup.ps1
+.\stt\whisperx\cleanup.ps1
 ```
